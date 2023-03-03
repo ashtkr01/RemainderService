@@ -2,7 +2,9 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 
-const cron = require('node-cron');
+const jobs = require('./utils/job');
+
+const apiRoutes = require('./routes/index');
 
 const { sendBasicMail} = require('./services/email-service');
 
@@ -14,8 +16,13 @@ const setUpAndStartServer = () => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
 
+    app.use('/api',apiRoutes);
+
     app.listen(PORT , ()=>{
         console.log(`Server Started at port ${PORT}`);
+
+        jobs();
+        console.log("Hi");
 
         // sendBasicMail(
         //     'ashstkr@gmail.com',
